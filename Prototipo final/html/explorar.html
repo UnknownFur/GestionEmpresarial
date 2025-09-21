@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explorar Rutas - App Ecológica</title>
+  <link rel="stylesheet" href="../css/style_index.css">
+  <link rel="stylesheet" href="../css/style_explorar.css" />
+</head>
+<body>
+
+  <!-- HEADER NAVBAR -->
+  <header class="navbar">
+    <div class="navbar-logo">🌿 App Ecológica</div>
+    <nav class="navbar-links" id="navbar-links">
+      <a href="../html/index.html">Inicio</a>
+      <a href="../html/explorar.html">Rutas</a>
+      <a href="../html/comunidad.html" class="active-link">Comunidad</a>
+      <a href="../html/perfil.html">Perfil</a>
+      <a href="../html/gamificacion.html">Gamificación</a>
+    </nav>
+    <div class="hamburger" id="hamburger">☰</div>
+  </header>
+
+  <main class="main-content">
+
+    <h1>🗺️ Explorar Rutas</h1>
+
+    <!-- Filtros -->
+    <section class="filters">
+      <label for="tipo">Filtrar por tipo:</label>
+      <select id="tipo" onchange="filtrarRutas()">
+        <option value="todas">Todas</option>
+        <option value="ecologica">Ecológica</option>
+        <option value="cultural">Cultural</option>
+        <option value="gastronomica">Gastronómica</option>
+      </select>
+    </section>
+
+    <!-- Lista de rutas -->
+    <section id="rutas-container" class="rutas-lista">
+      <!-- Las rutas se generan dinámicamente aquí -->
+    </section>
+
+<!-- MODAL -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span class="close-button" onclick="cerrarModal()">&times;</span>
+    <img src="img/mapa.png" alt="Mapa de la ruta" class="modal-img" />
+    <h2 id="modal-titulo">Título de la ruta</h2>
+    <p id="modal-descripcion">Descripción extendida de la ruta.</p>
+
+    <div class="precios">
+      <div class="precio-card">
+        <h4>Entrada General</h4>
+        <p>$10.000 COP</p>
+      </div>
+      <div class="precio-card">
+        <h4>Tour Guiado</h4>
+        <p>$25.000 COP</p>
+      </div>
+      <div class="precio-card">
+        <h4>Estudiantes</h4>
+        <p>$5.000 COP</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 App Ecológica</p>
+  </footer>
+
+  <script src="../js/script_index.js"></script>
+  <script src="../js/script_explorar.js"></script>
+</body>
+</html>

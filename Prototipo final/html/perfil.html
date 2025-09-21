@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>App Ecológica - Perfil</title>
+  <link rel="stylesheet" href="../css/style_index.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="navbar">
+    <div class="navbar-logo">🌿 App Ecológica</div>
+    <nav class="navbar-links" id="navbar-links">
+      <a href="../html/index.html">Inicio</a>
+      <a href="../html/explorar.html">Rutas</a>
+      <a href="../html/comunidad.html">Comunidad</a>
+      <a href="../html/perfil.html" class="active-link">Perfil</a>
+      <a href="../html/gamificacion.html">Gamificación</a>
+    </nav>
+    <div class="hamburger" id="hamburger">
+      ☰
+    </div>
+  </header>
+
+  <main class="main-content perfil-main">
+    <section class="perfil-info">
+      <h2>Mi Perfil</h2>
+      <div class="perfil-card">
+        <img src="img/user_avatar.png" alt="Foto de usuario" class="perfil-avatar" />
+        <div class="perfil-details">
+          <p><strong>Nombre:</strong> Juan Pérez</p>
+          <p><strong>Email:</strong> juan.perez@email.com</p>
+          <button id="editarPerfilBtn">Editar Perfil</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="perfil-historial">
+      <h3>Historial de rutas completadas</h3>
+      <ul id="historialRutas">
+        <!-- Rutas completadas aparecerán aquí -->
+      </ul>
+    </section>
+
+    <section class="perfil-logros">
+      <h3>Logros e Insignias</h3>
+      <div id="logrosContainer" class="logros-container">
+        <!-- Tarjetas de logros -->
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 App Ecológica</p>
+  </footer>
+
+  <script src="../js/script_perfil.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>App Ecológica - Gamificación</title>
+  <link rel="stylesheet" href="../css/style_index.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="navbar">
+    <div class="navbar-logo">🌿 App Ecológica</div>
+    <nav class="navbar-links" id="navbar-links">
+      <a href="../html/index.html">Inicio</a>
+      <a href="../html/explorar.html">Rutas</a>
+      <a href="../html/comunidad.html">Comunidad</a>
+      <a href="../html/perfil.html">Perfil</a>
+      <a href="../html/gamificacion.html" class="active-link">Gamificación</a>
+    </nav>
+    <div class="hamburger" id="hamburger">
+      ☰
+    </div>
+  </header>
+
+  <main class="main-content gamificacion-main">
+    <h2>Gamificación</h2>
+
+    <section class="eco-tokens">
+      <h3>Eco-Tokens acumulados</h3>
+      <div class="tokens-count">🌱 2450</div>
+    </section>
+
+    <section class="retos">
+      <h3>Retos Activos</h3>
+      <ul id="retosActivosList" class="retos-list">
+        <!-- Retos activos aparecerán aquí -->
+      </ul>
+    </section>
+
+    <section class="retos-completados">
+      <h3>Retos Completados</h3>
+      <ul id="retosCompletadosList" class="retos-list">
+        <!-- Retos completados aparecerán aquí -->
+      </ul>
+    </section>
+
+    <section class="insignias">
+      <h3>Insignias Obtenidas</h3>
+      <div id="insigniasContainer" class="logros-container">
+        <!-- Tarjetas insignias -->
+      </div>
+    </section>
+    
+    <!-- Nueva sección Juegos -->
+  <section class="juegos">
+    <h3>Juegos</h3>
+    <div id="juegosContainer" class="juegos-list">
+      <!-- Juegos aparecerán aquí -->
+    </div>
+  </section>
+
+    <button id="reclamarBtn" class="btn-reclamar">Reclamar Recompensas</button>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 App Ecológica</p>
+  </footer>
+
+  <script src="../js/script_gamificacion.js"></script>
+</body>
+</html>

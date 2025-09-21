@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>App Ecológica - Inicio</title>
+  <link rel="stylesheet" href="../css/style_index.css" />
+</head>
+<body>
+
+  <!-- NAVBAR / HEADER -->
+  <header class="navbar">
+    <div class="navbar-logo">🌿 App Ecológica</div>
+    <nav class="navbar-links" id="navbar-links">
+      <a href="../html/index.html">Inicio</a>
+      <a href="../html/explorar.html">Rutas</a>
+      <a href="../html/comunidad.html" class="active-link">Comunidad</a>
+      <a href="../html/perfil.html">Perfil</a>
+      <a href="../html/gamificacion.html">Gamificación</a>
+    </nav>
+    <div class="hamburger" id="hamburger">
+      ☰
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="main-content">
+
+    <!-- Bienvenida -->
+    <section class="highlight carrusel-rutas">
+  <h2>Rutas recomendadas</h2>
+  <div class="carrusel-container" id="carrusel-container">
+    <!-- Las tarjetas se generarán aquí con JS -->
+  </div>
+  <div class="carrusel-controles">
+    <button id="prevBtn">&#10094;</button>
+    <button id="nextBtn">&#10095;</button>
+  </div>
+</section>
+
+
+    <!-- Accesos rápidos -->
+    <section class="quick-access">
+      <h2>Explora</h2>
+      <div class="access-buttons">
+        <button onclick="irA('explorar')">🗺️ Rutas</button>
+        <button onclick="irA('comunidad')">🏆 Comunidad</button>
+        <button onclick="irA('perfil')">👤 Perfil</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER opcional -->
+  <footer class="footer">
+    <p>© 2025 App Ecológica</p>
+  </footer>
+
+  <script src="../js/script_index.js"></script>
+</body>
+</html>

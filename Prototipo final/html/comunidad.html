@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>App Ecológica - Comunidad</title>
+  <link rel="stylesheet" href="../css/style_index.css" />
+</head>
+<body>
+  <!-- HEADER (igual que en index) -->
+  <header class="navbar">
+    <div class="navbar-logo">🌿 App Ecológica</div>
+    <nav class="navbar-links" id="navbar-links">
+      <a href="../html/index.html">Inicio</a>
+      <a href="../html/explorar.html">Rutas</a>
+      <a href="../html/comunidad.html" class="active-link">Comunidad</a>
+      <a href="../html/perfil.html">Perfil</a>
+      <a href="../html/gamificacion.html">Gamificación</a>
+    </nav>
+    <div class="hamburger" id="hamburger">
+      ☰
+    </div>
+  </header>
+
+  <main class="main-content">
+    <section class="comunidad-section">
+      <h2>Comunidad</h2>
+
+      <form id="formPost" class="form-post">
+        <textarea id="nuevoPost" rows="3" placeholder="Escribe algo para compartir con la comunidad..."></textarea>
+        <button type="submit">Publicar</button>
+      </form>
+
+      <div id="postsContainer" class="posts-container">
+        <!-- Posts aparecerán aquí -->
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 App Ecológica</p>
+  </footer>
+
+  <script src="../js/script_comunidad.js"></script>
+</body>
+</html>
