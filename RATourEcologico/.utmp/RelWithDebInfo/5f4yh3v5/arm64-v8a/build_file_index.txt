@@ -1,0 +1,3 @@
+C:\Users\juanp\OneDrive\Documentos\GitHub\GestionEmpresarial\RATourEcologico\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt
+C:\Users\juanp\OneDrive\Documentos\GitHub\GestionEmpresarial\RATourEcologico\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\FramePacing\CMakeLists.txt
+C:\Users\juanp\OneDrive\Documentos\GitHub\GestionEmpresarial\RATourEcologico\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt

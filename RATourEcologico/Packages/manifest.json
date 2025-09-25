@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "com.cesium.unity": "file:C:/Users/juanp/Downloads/com.cesium.unity-1.18.0.tgz",
-    "com.google.ar.core.arfoundation.extensions": "file:C:/Users/juanp/Downloads/arcore-unity-extensions-1.50.0-arf4.tgz",
+    "com.google.ar.core.arfoundation.extensions": "https://github.com/google-ar/arcore-unity-extensions.git",
+    "com.unity.adaptiveperformance.google.android": "5.1.6",
     "com.unity.collab-proxy": "2.9.3",
     "com.unity.feature.mobile": "1.0.0",
     "com.unity.ide.rider": "3.0.31",

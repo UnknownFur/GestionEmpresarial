@@ -1,0 +1,23 @@
+# ninja log v5
+294	7080	7805177143028024	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	f6ba7a4a96cadbcd
+35	7104	7805177143149563	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	197b32e8de992ae5
+68	7019	7805177143149563	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	708a21da823d6271
+274	7205	7805177143673729	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	f52492ca5f4165fe
+7898	8670	7805177160189621	C:/Users/juanp/OneDrive/Documentos/GitHub/GestionEmpresarial/RATourEcologico/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/5f4yh3v5/obj/arm64-v8a/libswappywrapper.so	2b2b2ce77afaa079
+7022	10397	7805177177206005	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	5dcfb82162f73a0
+311	8019	7805177153240054	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	ed5c7bc5a5456ea7
+95	8540	7805177158452415	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	da5ed03726a6232f
+7105	7897	7805177151883403	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	b06f20bd973970e2
+7081	10751	7805177180979576	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	71c5bf5ee899281d
+10753	11029	7805177183886565	C:/Users/juanp/OneDrive/Documentos/GitHub/GestionEmpresarial/RATourEcologico/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/5f4yh3v5/obj/arm64-v8a/libgame.so	20cc3386d56fc822
+430	13407	7805202704906878	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	f6ba7a4a96cadbcd
+415	13502	7805202704952013	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	708a21da823d6271
+200	13525	7805202705191695	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	197b32e8de992ae5
+388	13654	7805202706363380	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	f52492ca5f4165fe
+448	14452	7805202715213930	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	ed5c7bc5a5456ea7
+280	14818	7805202718938934	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	da5ed03726a6232f
+13527	14839	7805202719157480	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	b06f20bd973970e2
+14840	15456	7805202725671467	C:/Users/juanp/OneDrive/Documentos/GitHub/GestionEmpresarial/RATourEcologico/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/5f4yh3v5/obj/arm64-v8a/libswappywrapper.so	2b2b2ce77afaa079
+13409	17255	7805202743581671	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	5dcfb82162f73a0
+13503	17968	7805202750728194	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	71c5bf5ee899281d
+17969	18347	7805202754601320	C:/Users/juanp/OneDrive/Documentos/GitHub/GestionEmpresarial/RATourEcologico/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/5f4yh3v5/obj/arm64-v8a/libgame.so	20cc3386d56fc822

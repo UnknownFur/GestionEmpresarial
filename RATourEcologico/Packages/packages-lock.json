@@ -12,14 +12,15 @@
       }
     },
     "com.google.ar.core.arfoundation.extensions": {
-      "version": "file:C:/Users/juanp/Downloads/arcore-unity-extensions-1.50.0-arf4.tgz",
+      "version": "https://github.com/google-ar/arcore-unity-extensions.git",
       "depth": 0,
-      "source": "local-tarball",
+      "source": "git",
       "dependencies": {
         "com.unity.xr.arfoundation": "4.1.5",
         "com.unity.xr.arcore": "4.1.5",
         "com.unity.xr.arkit": "4.1.5"
-      }
+      },
+      "hash": "6dfba4a41f4aef634ea66e24c214c93c963faea4"
     },
     "com.unity.adaptiveperformance": {
       "version": "5.1.3",
@@ -28,6 +29,17 @@
       "dependencies": {
         "com.unity.profiling.core": "1.0.2",
         "com.unity.modules.subsystems": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.adaptiveperformance.google.android": {
+      "version": "5.1.6",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.androidjni": "1.0.0",
+        "com.unity.modules.subsystems": "1.0.0",
+        "com.unity.adaptiveperformance": "5.1.0"
       },
       "url": "https://packages.unity.com"
     },

@@ -11,7 +11,10 @@ EditorBuildSettings:
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: b22aad1b6c1daf84091776c5a9d4d753, type: 2}
     UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: b05e9f6260188d9498bc724c8af94547, type: 2}
+    com.unity.adaptiveperformance.google.android.provider_settings: {fileID: 11400000, guid: b19aa226b765ea54995c23408d0c9a35, type: 2}
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 1be7404ff0d9e5b48b10777583cd3d96, type: 2}
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 37a51d54114c47b42b95814707aea1e3, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: ad7fa7963ddd5904fa8c4d33290e3dc3, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 5c660e8f2ea490740ab34602be74e1b4, type: 2}
   m_UseUCBPForAssetBundles: 0
