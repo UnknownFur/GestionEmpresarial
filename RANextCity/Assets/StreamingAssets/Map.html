@@ -8,28 +8,30 @@
   </style>
 
   <!-- Tu API KEY va aquí -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBw6Ktt-rw12jLhpJpkd3evPUYhu0YkZZM"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBw6Ktt-rw12jLhpJpkd3evPUYhu0YkZZM&libraries=geometry&callback=initMap" async defer></script>
 
   <script>
     var map;
     var userMarker;
     var poiMarkers = [];
 
-    function initMap() {
+  function initMap() {
       map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 15,
-        center: { lat: 4.7110, lng: -74.0721 } // Bogotá por defecto
+          zoom: 15,
+          center: { lat: 4.7110, lng: -74.0721 } // Bogotá por defecto
       });
-      // Avisar a Unity que el mapa ya está cargado
+
+      // Avisar a Unity que el mapa ya está listo
       if (typeof unity !== "undefined" && unity) {
           unity.SendMessage("MapLoader", "OnMapReady");
-      } else if (window && window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.unityControl) {
-          window.webkit.messageHandlers.unityControl.postMessage("OnMapReady");
       }
-    }
+  }
 
     // Llamado desde Unity → actualiza posición del usuario
     function updateUserPosition(lat, lon) {
+      console.log("📍 Nueva posición: " + lat + ", " + lon);
+      if (!map) return;
+
       var pos = new google.maps.LatLng(lat, lon);
 
       if (!userMarker) {
@@ -57,8 +59,6 @@
 
       poiMarkers.push(marker);
     }
-
-    window.onload = initMap;
   </script>
 </head>
 <body>
