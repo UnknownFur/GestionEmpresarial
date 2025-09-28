@@ -2,9 +2,13 @@
 <html>
 <head>
   <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+  <body>
+    <p>Hola</p>
+  </body>
   <style>
     html, body { height: 100%; margin: 0; padding: 0; }
     #map { height: 100%; width: 100%; }
+    body {display: flex; align-items: center;}
   </style>
 
   <!-- Tu API KEY va aquí -->
@@ -14,50 +18,86 @@
     var map;
     var userMarker;
     var poiMarkers = [];
+    var directionsService;
+    var directionsRenderer;
 
-  function initMap() {
+    // Inicializar mapa
+    function initMap() {
       map = new google.maps.Map(document.getElementById("map"), {
           zoom: 15,
           center: { lat: 4.7110, lng: -74.0721 } // Bogotá por defecto
       });
 
+      directionsService = new google.maps.DirectionsService();
+      directionsRenderer = new google.maps.DirectionsRenderer({ map: map });
+
       // Avisar a Unity que el mapa ya está listo
       if (typeof unity !== "undefined" && unity) {
           unity.SendMessage("MapLoader", "OnMapReady");
       }
-  }
-
-    // Llamado desde Unity → actualiza posición del usuario
-    function updateUserPosition(lat, lon) {
-      console.log("📍 Nueva posición: " + lat + ", " + lon);
-      if (!map) return;
-
-      var pos = new google.maps.LatLng(lat, lon);
-
-      if (!userMarker) {
-        userMarker = new google.maps.Marker({
-          position: pos,
-          map: map,
-          title: "Tu ubicación",
-          icon: { url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png" }
-        });
-      } else {
-        userMarker.setPosition(pos);
-      }
-
-      map.setCenter(pos);
     }
 
-    // Llamado desde Unity → agrega un POI
-    function addPOI(lat, lon, title) {
-      var marker = new google.maps.Marker({
-        position: { lat: lat, lng: lon },
-        map: map,
-        title: title,
-        icon: { url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png" }
-      });
+    // Llamado desde Unity → actualiza posición del usuario
+  var lastUserPos = null; // guarda última posición
 
-      poiMarkers.push(marker);
+  function updateUserPosition(lat, lon) {
+    console.log("📍 Nueva posición: " + lat + ", " + lon);
+    if (!map) return;
+
+    var pos = new google.maps.LatLng(lat, lon);
+
+    if (!userMarker) {
+      userMarker = new google.maps.Marker({
+        position: pos,
+        map: map,
+        title: "Tu ubicación",
+        icon: { url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png" }
+      });
+    } else {
+      userMarker.setPosition(pos);
+    }
+
+    // hace que el mapa siga al usuario suavemente
+    map.panTo(pos);
+
+    // solo recalcular ruta si el usuario se movió más de 5 metros
+    if (!lastUserPos || google.maps.geometry.spherical.computeDistanceBetween(pos, lastUserPos) > 5) {
+      showRouteToClosestPOI();
+      lastUserPos = pos;
+    }
+  }
+
+
+    // Calcular ruta al POI más cercano
+    function showRouteToClosestPOI() {
+      if (!userMarker || poiMarkers.length === 0) return;
+
+      let userPos = userMarker.getPosition();
+      let closest = poiMarkers[0];
+      let minDist = google.maps.geometry.spherical.computeDistanceBetween(userPos, closest.getPosition());
+
+      for (let i = 1; i < poiMarkers.length; i++) {
+          let dist = google.maps.geometry.spherical.computeDistanceBetween(userPos, poiMarkers[i].getPosition());
+          if (dist < minDist) {
+              minDist = dist;
+              closest = poiMarkers[i];
+          }
+      }
+
+      directionsService.route(
+          {
+              origin: userPos,
+              destination: closest.getPosition(),
+              travelMode: 'WALKING'
+          },
+          function(result, status) {
+              if (status === 'OK') {
+                  directionsRenderer.setDirections(result);
+              } else {
+                  console.warn("No se pudo calcular ruta: " + status);
+              }
+          }
+      );
     }
   </script>
 </head>
