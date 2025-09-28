@@ -1,15 +1,13 @@
 using UnityEngine;
-
+using Vuforia;
 public class POIManager : MonoBehaviour
 {
-    private GPSController gps;
-    private MapLoader mapLoader;
+    [SerializeField] private LocationPermission locationPermission; // Asignar en Inspector
+    [SerializeField] private MapLoader mapLoader;
     private POI[] pois;
 
     void Start()
     {
-        gps = GetComponent<GPSController>();
-        mapLoader = GetComponent<MapLoader>();
         pois = Object.FindObjectsByType<POI>(FindObjectsSortMode.None);
 
         // Enviar los POI al mapa (JS)
@@ -23,16 +21,17 @@ public class POIManager : MonoBehaviour
 
     void Update()
     {
-        if (gps == null || !gps.HasLocation()) return;
+        if (locationPermission == null) return;
 
-        Vector2 userPos = gps.GetLatLon();
-        mapLoader.UpdatePosition(userPos.x, userPos.y);
+        double lat = locationPermission.latitude;
+        double lon = locationPermission.longitude;
+
+        mapLoader.UpdatePosition(lat, lon);
 
         foreach (var poi in pois)
         {
-            float dist = Haversine(userPos.x, userPos.y, poi.latitude, poi.longitude);
+            float dist = Haversine(lat, lon, poi.latitude, poi.longitude);
 
-            // 🔹 Entrar en el POI → activar RA
             if (!poi.isActive && dist <= poi.activationRadius)
             {
                 poi.isActive = true;
@@ -40,7 +39,6 @@ public class POIManager : MonoBehaviour
                 ActivatePOI(poi);
             }
 
-            // 🔹 Salir del POI → desactivar RA y volver al mapa
             if (poi.isActive && dist > poi.deactivationRadius)
             {
                 poi.isActive = false;
@@ -50,36 +48,43 @@ public class POIManager : MonoBehaviour
         }
     }
 
-
     void ActivatePOI(POI poi)
     {
-        // Ocultar mapa
         mapLoader.ShowMap(false);
 
-        // Activar AR
-        GameObject arCam = GameObject.Find("ARCamera");
+        var arCam = GameObject.Find("ARCamera");
         if (arCam != null)
-            arCam.SetActive(true);
+        {
+            var vuforiaBehaviour = arCam.GetComponent<VuforiaBehaviour>();
+            if (vuforiaBehaviour != null)
+            {
+                vuforiaBehaviour.enabled = true; // activa tracking
+            }
+        }
 
-        // Aquí también puedes activar un prefab de información en RA
+        Debug.Log($"🚀 Activando AR: {poi.poiName}");
     }
 
     void DeactivatePOI(POI poi)
     {
-        // Mostrar mapa otra vez
         mapLoader.ShowMap(true);
 
-        // Apagar la ARCamera
-        GameObject arCam = GameObject.Find("ARCamera");
+        var arCam = GameObject.Find("ARCamera");
         if (arCam != null)
-            arCam.SetActive(false);
+        {
+            var vuforiaBehaviour = arCam.GetComponent<VuforiaBehaviour>();
+            if (vuforiaBehaviour != null)
+            {
+                vuforiaBehaviour.enabled = false; // pausa tracking
+            }
+        }
 
-        Debug.Log($"📍 Volviendo al mapa, saliste del POI: {poi.poiName}");
+        Debug.Log($"📍 Saliste del POI: {poi.poiName}, tracking pausado");
     }
 
     float Haversine(double lat1, double lon1, double lat2, double lon2)
     {
-        double R = 6371000; // Radio de la Tierra en metros
+        double R = 6371000; // metros
         double dLat = Mathf.Deg2Rad * (float)(lat2 - lat1);
         double dLon = Mathf.Deg2Rad * (float)(lon2 - lon1);
         double a = Mathf.Sin((float)dLat / 2) * Mathf.Sin((float)dLat / 2) +

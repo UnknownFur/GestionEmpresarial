@@ -20,6 +20,12 @@
         zoom: 15,
         center: { lat: 4.7110, lng: -74.0721 } // Bogotá por defecto
       });
+      // Avisar a Unity que el mapa ya está cargado
+      if (typeof unity !== "undefined" && unity) {
+          unity.SendMessage("MapLoader", "OnMapReady");
+      } else if (window && window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.unityControl) {
+          window.webkit.messageHandlers.unityControl.postMessage("OnMapReady");
+      }
     }
 
     // Llamado desde Unity → actualiza posición del usuario

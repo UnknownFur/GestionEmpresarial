@@ -2,8 +2,11 @@ using UnityEngine;
 
 public class MapLoader : MonoBehaviour
 {
-    [SerializeField] private UnityEngine.Object htmlFile;
     private WebViewObject webViewObject;
+    public bool mapReady = false;
+
+    // Referencia al script de ubicación
+    [SerializeField] private LocationPermission locationPermission;
 
     void Start()
     {
@@ -20,21 +23,20 @@ public class MapLoader : MonoBehaviour
         webViewObject.SetMargins(0, 0, 0, 0);
         webViewObject.SetVisibility(true);
 
-        // Cargar el HTML desde StreamingAssets
-        if(htmlFile == null)
-        {
-            Debug.LogError("No has asignado ningún archivo HTML");
-            return;
-        }
-
-        string path = System.IO.Path.Combine(Application.streamingAssetsPath, htmlFile.name + ".html");
-
-        #if UNITY_ANDROID
-            webViewObject.LoadURL(path.Replace("file://", "jar:file://"));
-        #else
-            webViewObject.LoadURL("file://" + path);
-        #endif
+        // Cargar URL remota
+        string url = "https://unknownfur.github.io/GestionEmpresarial/RANextCity/Assets/StreamingAssets/Map.html";
+        webViewObject.LoadURL(url);
     }
+
+    void Update()
+    {
+        // Cada frame enviamos la ubicación al WebView
+        if (locationPermission != null && mapReady)
+        {
+            UpdatePosition(locationPermission.latitude, locationPermission.longitude);
+        }
+    }
+
     // 🔹 Actualizar la posición del usuario en el mapa (Unity → JS)
     public void UpdatePosition(double lat, double lon)
     {
@@ -42,14 +44,14 @@ public class MapLoader : MonoBehaviour
         SendJS(js);
     }
 
-    // 🔹 Nuevo → Ejecutar cualquier JS desde Unity
+    // 🔹 Ejecutar cualquier JS desde Unity
     public void SendJS(string jsCode)
     {
         if (webViewObject != null)
             webViewObject.EvaluateJS(jsCode);
     }
 
-    // 🔹 Nuevo → Mostrar / ocultar el mapa
+    // 🔹 Mostrar / ocultar el mapa
     public void ShowMap(bool state)
     {
         if (webViewObject != null)
@@ -63,15 +65,18 @@ public class MapLoader : MonoBehaviour
 
         if (msg == "near_poi")
         {
-            // Ocultar el mapa (WebView)
             ShowMap(false);
 
-            // Activar la ARCamera de Vuforia
             GameObject arCam = GameObject.Find("ARCamera");
             if (arCam != null)
                 arCam.SetActive(true);
 
             Debug.Log("🚀 Activando AR porque llegaste al punto de interés");
         }
+    }
+    public void OnMapReady()
+    {
+        mapReady = true;
+        Debug.Log("🟢 Mapa listo en WebView");
     }
 }
