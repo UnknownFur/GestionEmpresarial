@@ -2,17 +2,13 @@
 <html>
 <head>
   <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-  <body>
-    <p>Hola</p>
-  </body>
   <style>
     html, body { height: 100%; margin: 0; padding: 0; }
     #map { height: 100%; width: 100%; }
-    body {display: flex; align-items: center;}
   </style>
 
-  <!-- Tu API KEY va aquí -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBw6Ktt-rw12jLhpJpkd3evPUYhu0YkZZM&libraries=geometry&callback=initMap" async defer></script>
+  <!-- API KEY -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBw6Ktt-rw12jLhpJpkd3evPUYhu0YkZZM&libraries=geometry"></script>
 
   <script>
     var map;
@@ -20,85 +16,117 @@
     var poiMarkers = [];
     var directionsService;
     var directionsRenderer;
+    var lastUserPos = null;
 
-    // Inicializar mapa
     function initMap() {
       map = new google.maps.Map(document.getElementById("map"), {
-          zoom: 15,
-          center: { lat: 4.7110, lng: -74.0721 } // Bogotá por defecto
+        zoom: 15,
+        center: { lat: 4.7110, lng: -74.0721 } // Bogotá
       });
 
       directionsService = new google.maps.DirectionsService();
-      directionsRenderer = new google.maps.DirectionsRenderer({ map: map });
+      directionsRenderer = new google.maps.DirectionsRenderer({
+        map: map,
+        suppressMarkers: false
+      });
 
-      // Avisar a Unity que el mapa ya está listo
+      // Simular ubicación inicial del usuario
+      if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        updateUserPosition(position.coords.latitude, position.coords.longitude);
+      }, function(error) {
+        console.error("❌ Error obteniendo ubicación:", error);
+        // fallback a coordenadas simuladas
+        updateUserPosition(4.7112, -74.0720);
+      });
+    } else {
+      console.warn("❌ Geolocation no soportada, usando ubicación simulada");
+      updateUserPosition(4.7112, -74.0720);
+    }
+
+
       if (typeof unity !== "undefined" && unity) {
-          unity.SendMessage("MapLoader", "OnMapReady");
+        unity.SendMessage("MapLoader", "OnMapReady");
       }
     }
 
-    // Llamado desde Unity → actualiza posición del usuario
-  var lastUserPos = null; // guarda última posición
-
-  function updateUserPosition(lat, lon) {
-    console.log("📍 Nueva posición: " + lat + ", " + lon);
-    if (!map) return;
-
-    var pos = new google.maps.LatLng(lat, lon);
-
-    if (!userMarker) {
-      userMarker = new google.maps.Marker({
-        position: pos,
+    function addPOI(lat, lon, title) {
+      var marker = new google.maps.Marker({
+        position: { lat: lat, lng: lon },
         map: map,
-        title: "Tu ubicación",
-        icon: { url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png" }
+        title: title,
+        icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
       });
-    } else {
-      userMarker.setPosition(pos);
+      poiMarkers.push(marker);
     }
 
-    // hace que el mapa siga al usuario suavemente
-    map.panTo(pos);
+    function updateUserPosition(lat, lon) {
+      console.log("📍 Nueva posición: " + lat + ", " + lon);
+      if (!map) return;
 
-    // solo recalcular ruta si el usuario se movió más de 5 metros
-    if (!lastUserPos || google.maps.geometry.spherical.computeDistanceBetween(pos, lastUserPos) > 5) {
-      showRouteToClosestPOI();
-      lastUserPos = pos;
+      var pos = new google.maps.LatLng(lat, lon);
+
+      if (!userMarker) {
+        userMarker = new google.maps.Marker({
+          position: pos,
+          map: map,
+          title: "Tu ubicación",
+          icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+        });
+      } else {
+        userMarker.setPosition(pos);
+      }
+
+      map.panTo(pos);
+
+      // solo recalcular ruta si se movió > 5m
+      if (!lastUserPos || google.maps.geometry.spherical.computeDistanceBetween(pos, lastUserPos) > 5) {
+        showRouteToClosestPOI();
+        lastUserPos = pos;
+      }
     }
-  }
 
-
-    // Calcular ruta al POI más cercano
     function showRouteToClosestPOI() {
       if (!userMarker || poiMarkers.length === 0) return;
 
-      let userPos = userMarker.getPosition();
+      let userPos = userMarker.getPosition(); // LatLng válido
       let closest = poiMarkers[0];
       let minDist = google.maps.geometry.spherical.computeDistanceBetween(userPos, closest.getPosition());
 
       for (let i = 1; i < poiMarkers.length; i++) {
-          let dist = google.maps.geometry.spherical.computeDistanceBetween(userPos, poiMarkers[i].getPosition());
-          if (dist < minDist) {
-              minDist = dist;
-              closest = poiMarkers[i];
-          }
+        let dist = google.maps.geometry.spherical.computeDistanceBetween(userPos, poiMarkers[i].getPosition());
+        if (dist < minDist) {
+          minDist = dist;
+          closest = poiMarkers[i];
+        }
       }
 
+      // ✅ convertir a objetos {lat, lng}
+      let origin = { lat: userPos.lat(), lng: userPos.lng() };
+      let destination = { 
+        lat: closest.getPosition().lat(), 
+        lng: closest.getPosition().lng() 
+      };
+
       directionsService.route(
-          {
-              origin: userPos,
-              destination: closest.getPosition(),
-              travelMode: 'WALKING'
-          },
-          function(result, status) {
-              if (status === 'OK') {
-                  directionsRenderer.setDirections(result);
-              } else {
-                  console.warn("No se pudo calcular ruta: " + status);
-              }
+        {
+          origin: origin,
+          destination: destination,
+          travelMode: google.maps.TravelMode.WALKING
+        },
+        function(result, status) {
+          console.log("Ruta status:", status);
+          if (status === "OK") {
+            directionsRenderer.setDirections(result);
+          } else {
+            console.warn("❌ No se pudo calcular ruta: " + status);
           }
+        }
       );
     }
+
+    // ✅ Llamar a initMap cuando cargue la página
+    window.onload = initMap;
   </script>
 </head>
 <body>
