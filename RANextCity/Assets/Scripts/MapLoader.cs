@@ -5,12 +5,12 @@ public class MapLoader : MonoBehaviour
     private WebViewObject webViewObject;
     public bool mapReady = false;
 
-    // Referencia al script de ubicación
+    // Referencia al script que gestiona GPS en Unity
     [SerializeField] private LocationPermission locationPermission;
 
     void Start()
     {
-        // Crear el WebView
+        // Crear WebView
         webViewObject = (new GameObject("WebViewObject")).AddComponent<WebViewObject>();
         webViewObject.Init(
             cb: (msg) => { OnMessageFromJS(msg); },
@@ -23,14 +23,14 @@ public class MapLoader : MonoBehaviour
         webViewObject.SetMargins(0, 0, 0, 0);
         webViewObject.SetVisibility(true);
 
-        // Cargar URL remota
+        // Cargar URL remota de tu mapa
         string url = "https://unknownfur.github.io/GestionEmpresarial/RANextCity/Assets/StreamingAssets/Map.html";
         webViewObject.LoadURL(url);
     }
 
     void Update()
     {
-        // Cada frame enviamos la ubicación al WebView
+        // Enviar ubicación cada frame solo si el mapa ya está listo
         if (locationPermission != null && mapReady)
         {
             UpdatePosition(locationPermission.latitude, locationPermission.longitude);
@@ -42,6 +42,18 @@ public class MapLoader : MonoBehaviour
     {
         string js = $"updateUserPosition({lat}, {lon})";
         SendJS(js);
+    }
+
+    // 🔹 Enviar todos los POIs al mapa
+    public void SendPOIs()
+    {
+        POI[] pois = Object.FindObjectsByType<POI>(FindObjectsSortMode.None);
+
+        foreach (var poi in pois)
+        {
+            string js = $"addPOI({poi.latitude}, {poi.longitude}, '{poi.poiName}')";
+            SendJS(js);
+        }
     }
 
     // 🔹 Ejecutar cualquier JS desde Unity
@@ -58,12 +70,16 @@ public class MapLoader : MonoBehaviour
             webViewObject.SetVisibility(state);
     }
 
-    // 🔹 Recibir mensajes del mapa (JS → Unity)
+    // 🔹 Recibir mensajes desde el mapa (JS → Unity)
     private void OnMessageFromJS(string msg)
     {
         Debug.Log("Mensaje desde JS: " + msg);
 
-        if (msg == "near_poi")
+        if (msg == "map_ready")
+        {
+            OnMapReady();
+        }
+        else if (msg == "near_poi")
         {
             ShowMap(false);
 
@@ -74,9 +90,14 @@ public class MapLoader : MonoBehaviour
             Debug.Log("🚀 Activando AR porque llegaste al punto de interés");
         }
     }
+
+    // 🔹 Cuando el mapa HTML avisa que está listo
     public void OnMapReady()
     {
         mapReady = true;
         Debug.Log("🟢 Mapa listo en WebView");
+
+        // Enviar los POIs al mapa
+        SendPOIs();
     }
 }

@@ -32,22 +32,20 @@
 
       // Simular ubicación inicial del usuario
       if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        updateUserPosition(position.coords.latitude, position.coords.longitude);
-      }, function(error) {
-        console.error("❌ Error obteniendo ubicación:", error);
-        // fallback a coordenadas simuladas
+        navigator.geolocation.getCurrentPosition(function(position) {
+          updateUserPosition(position.coords.latitude, position.coords.longitude);
+        }, function(error) {
+          console.error("❌ Error obteniendo ubicación:", error);
+          // fallback a coordenadas simuladas
+          updateUserPosition(4.7112, -74.0720);
+        });
+      } else {
+        console.warn("❌ Geolocation no soportada, usando ubicación simulada");
         updateUserPosition(4.7112, -74.0720);
-      });
-    } else {
-      console.warn("❌ Geolocation no soportada, usando ubicación simulada");
-      updateUserPosition(4.7112, -74.0720);
-    }
-
-
-      if (typeof unity !== "undefined" && unity) {
-        unity.SendMessage("MapLoader", "OnMapReady");
       }
+
+      // ✅ Avisar a Unity que el mapa está listo
+      unityReady();
     }
 
     function addPOI(lat, lon, title) {
@@ -123,6 +121,13 @@
           }
         }
       );
+    }
+
+    // 🔹 Avisar a Unity que el mapa ya está cargado
+    function unityReady() {
+      if (window.Unity) {
+        Unity.call("map_ready");
+      }
     }
 
     // ✅ Llamar a initMap cuando cargue la página
