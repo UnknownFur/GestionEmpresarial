@@ -17,21 +17,19 @@
     var directionsService;
     var directionsRenderer;
     var lastUserPos = null;
+    var distanceDiv;       // 📏 Mostrar distancia
+    var nearPOISent = false; // ⚙️ Para no repetir notificación a Unity
 
     function initMap() {
       map = new google.maps.Map(document.getElementById("map"), {
         zoom: 15,
         center: { lat: 4.7110, lng: -74.0721 }, // Bogotá
-
-        // 🔒 Desactivar todos los controles y gestos innecesarios
         disableDefaultUI: true,
         zoomControl: false,
         mapTypeControl: false,
         streetViewControl: false,
         fullscreenControl: false,
-        gestureHandling: "greedy", // usa "none" si quieres que no se pueda mover ni hacer zoom
-
-        // 🎨 Estilo oscuro personalizado (el tuyo)
+        gestureHandling: "greedy",
         styles: [
           { elementType: "geometry", stylers: [{ color: "#212121" }] },
           { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
@@ -60,17 +58,35 @@
       directionsService = new google.maps.DirectionsService();
       directionsRenderer = new google.maps.DirectionsRenderer({
         map: map,
-        suppressMarkers: false
+        suppressMarkers: false,
+        preserveViewport: true
       });
 
-      // 🛰️ Obtener la ubicación actual del usuario
+      // 📏 Elemento visual de distancia
+      distanceDiv = document.createElement("div");
+      distanceDiv.style.position = "absolute";
+      distanceDiv.style.bottom = "10px";
+      distanceDiv.style.left = "50%";
+      distanceDiv.style.transform = "translateX(-50%)";
+      distanceDiv.style.background = "rgba(0,0,0,0.6)";
+      distanceDiv.style.color = "white";
+      distanceDiv.style.padding = "6px 12px";
+      distanceDiv.style.borderRadius = "12px";
+      distanceDiv.style.fontFamily = "sans-serif";
+      distanceDiv.style.fontSize = "14px";
+      distanceDiv.style.zIndex = "9999";
+      distanceDiv.innerText = "📍 Calculando distancia...";
+      document.body.appendChild(distanceDiv);
+
+      // 🛰️ Obtener ubicación del usuario
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          updateUserPosition(position.coords.latitude, position.coords.longitude);
-        }, function(error) {
-          console.error("❌ Error obteniendo ubicación:", error);
-          updateUserPosition(4.7112, -74.0720); // Fallback
-        });
+        navigator.geolocation.getCurrentPosition(
+          (pos) => updateUserPosition(pos.coords.latitude, pos.coords.longitude),
+          (error) => {
+            console.error("❌ Error obteniendo ubicación:", error);
+            updateUserPosition(4.7112, -74.0720);
+          }
+        );
       } else {
         console.warn("❌ Geolocation no soportada, usando ubicación simulada");
         updateUserPosition(4.7112, -74.0720);
@@ -80,6 +96,7 @@
       unityReady();
     }
 
+    // 🧭 Agregar puntos de interés
     function addPOI(lat, lon, title) {
       var marker = new google.maps.Marker({
         position: { lat: lat, lng: lon },
@@ -90,11 +107,10 @@
       poiMarkers.push(marker);
     }
 
+    // 📍 Actualizar la posición del usuario
     function updateUserPosition(lat, lon) {
-      console.log("📍 Nueva posición: " + lat + ", " + lon);
-      if (!map) return;
-
       var pos = new google.maps.LatLng(lat, lon);
+      if (!map) return;
 
       if (!userMarker) {
         userMarker = new google.maps.Marker({
@@ -109,13 +125,14 @@
 
       map.panTo(pos);
 
-      // Recalcular ruta si se movió más de 5m
-      if (!lastUserPos || google.maps.geometry.spherical.computeDistanceBetween(pos, lastUserPos) > 5) {
-        showRouteToClosestPOI();
+      if (!lastUserPos || google.maps.geometry.spherical.computeDistanceBetween(pos, lastUserPos) > 3) {
         lastUserPos = pos;
+        showRouteToClosestPOI();
+        updateDistanceToClosestPOI();
       }
     }
 
+    // 🚶‍♂️ Mostrar ruta al POI más cercano
     function showRouteToClosestPOI() {
       if (!userMarker || poiMarkers.length === 0) return;
 
@@ -141,19 +158,54 @@
           travelMode: google.maps.TravelMode.WALKING
         },
         function(result, status) {
-          console.log("Ruta status:", status);
           if (status === "OK") {
             directionsRenderer.setDirections(result);
           } else {
-            console.warn("❌ No se pudo calcular ruta: " + status);
+            console.warn("❌ No se pudo calcular ruta:", status);
           }
         }
       );
     }
 
+    // 📏 Calcular distancia al POI más cercano y avisar a Unity
+    function updateDistanceToClosestPOI() {
+      if (!userMarker || poiMarkers.length === 0) return;
+
+      let userPos = userMarker.getPosition();
+      let closest = poiMarkers[0];
+      let minDist = google.maps.geometry.spherical.computeDistanceBetween(userPos, closest.getPosition());
+
+      for (let i = 1; i < poiMarkers.length; i++) {
+        let dist = google.maps.geometry.spherical.computeDistanceBetween(userPos, poiMarkers[i].getPosition());
+        if (dist < minDist) {
+          minDist = dist;
+          closest = poiMarkers[i];
+        }
+      }
+
+      distanceDiv.innerText = `📏 Estás a ${minDist.toFixed(1)} m del punto de interés`;
+
+      if (minDist < 20 && !nearPOISent) {
+        nearPOISent = true;
+        console.log("🎯 Dentro del rango del POI:", minDist.toFixed(1), "m");
+        if (window.Unity && typeof Unity.call === "function") {
+          Unity.call("near_poi");
+        }
+      }
+
+      // Si se aleja, volver a permitir activación
+      if (minDist > 30 && nearPOISent) {
+        nearPOISent = false;
+      }
+    }
+
+    // 🔔 Confirmar a Unity que el mapa está listo
     function unityReady() {
-      if (window.Unity) {
+      if (window.Unity && typeof Unity.call === "function") {
         Unity.call("map_ready");
+      } else {
+        console.warn("⚠️ Unity no detectado aún, reintentando...");
+        setTimeout(unityReady, 1000);
       }
     }
 
