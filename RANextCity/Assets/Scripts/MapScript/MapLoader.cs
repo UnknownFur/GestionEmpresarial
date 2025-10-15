@@ -99,5 +99,16 @@ public class MapLoader : MonoBehaviour
 
         // Enviar los POIs al mapa
         SendPOIs();
+
+        // Enviar posición inicial del usuario (para el pin azul)
+        if (locationPermission != null)
+        {
+            double lat = locationPermission.latitude;
+            double lon = locationPermission.longitude;
+
+            string js = $"updateUserPosition({lat}, {lon});";
+            SendJS(js);
+        }
     }
+
 }

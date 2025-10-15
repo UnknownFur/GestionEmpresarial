@@ -1,55 +1,65 @@
 using UnityEngine;
 using Vuforia;
+using System.Collections.Generic;
+
 public class POIManager : MonoBehaviour
 {
-    [SerializeField] private LocationPermission locationPermission; // Asignar en Inspector
+    [Header("Referencias")]
+    [SerializeField] private LocationPermission locationPermission;
     [SerializeField] private MapLoader mapLoader;
-    private POI[] pois;
+    [SerializeField] private List<POI> poiList = new List<POI>();
+
+    private int currentPOIIndex = 0;
 
     void Start()
     {
-        pois = Object.FindObjectsByType<POI>(FindObjectsSortMode.None);
-
-        // Enviar los POI al mapa (JS)
-        foreach (var poi in pois)
+        if (poiList.Count == 0)
         {
-            string js = string.Format("addPOI({0}, {1}, '{2}')", 
-                                       poi.latitude, poi.longitude, poi.poiName);
+            Debug.LogWarning("⚠️ No hay POIs asignados en el Inspector");
+            return;
+        }
+
+        // Solo el primer POI está activo al inicio
+        for (int i = 0; i < poiList.Count; i++)
+        {
+            poiList[i].gameObject.SetActive(i == 0);
+            poiList[i].isActive = i == 0;
+        }
+
+        // Enviar los POIs visibles al mapa
+        foreach (var poi in poiList)
+        {
+            string js = $"addPOI({poi.latitude}, {poi.longitude}, '{poi.poiName}')";
             mapLoader.SendJS(js);
         }
+
+        Debug.Log($"🎯 POI inicial activo: {poiList[0].poiName}");
     }
 
     void Update()
     {
-        if (locationPermission == null) return;
+        if (locationPermission == null || poiList.Count == 0) return;
 
         double lat = locationPermission.latitude;
         double lon = locationPermission.longitude;
-
         mapLoader.UpdatePosition(lat, lon);
 
-        foreach (var poi in pois)
+        POI activePOI = poiList[currentPOIIndex];
+        float dist = Haversine(lat, lon, activePOI.latitude, activePOI.longitude);
+
+        if (!activePOI.isActive && dist <= activePOI.activationRadius)
         {
-            float dist = Haversine(lat, lon, poi.latitude, poi.longitude);
-
-            if (!poi.isActive && dist <= poi.activationRadius)
-            {
-                poi.isActive = true;
-                Debug.Log($"🚀 Activando POI: {poi.poiName}");
-                ActivatePOI(poi);
-            }
-
-            if (poi.isActive && dist > poi.deactivationRadius)
-            {
-                poi.isActive = false;
-                Debug.Log($"⬅️ Saliendo del POI: {poi.poiName}");
-                DeactivatePOI(poi);
-            }
+            ActivatePOI(activePOI);
+        }
+        else if (activePOI.isActive && dist > activePOI.deactivationRadius)
+        {
+            DeactivatePOI(activePOI);
         }
     }
 
     void ActivatePOI(POI poi)
     {
+        poi.isActive = true;
         mapLoader.ShowMap(false);
 
         var arCam = GameObject.Find("ARCamera");
@@ -57,16 +67,15 @@ public class POIManager : MonoBehaviour
         {
             var vuforiaBehaviour = arCam.GetComponent<VuforiaBehaviour>();
             if (vuforiaBehaviour != null)
-            {
-                vuforiaBehaviour.enabled = true; // activa tracking
-            }
+                vuforiaBehaviour.enabled = true;
         }
 
-        Debug.Log($"🚀 Activando AR: {poi.poiName}");
+        Debug.Log($"🚀 Activando POI: {poi.poiName}");
     }
 
     void DeactivatePOI(POI poi)
     {
+        poi.isActive = false;
         mapLoader.ShowMap(true);
 
         var arCam = GameObject.Find("ARCamera");
@@ -74,22 +83,26 @@ public class POIManager : MonoBehaviour
         {
             var vuforiaBehaviour = arCam.GetComponent<VuforiaBehaviour>();
             if (vuforiaBehaviour != null)
-            {
-                vuforiaBehaviour.enabled = false; // pausa tracking
-            }
+                vuforiaBehaviour.enabled = false;
         }
 
-        Debug.Log($"📍 Saliste del POI: {poi.poiName}, tracking pausado");
-        var seqManager = FindAnyObjectByType<SequentialPOIManager>();
-        if (seqManager != null)
+        // Pasar al siguiente POI
+        currentPOIIndex++;
+        if (currentPOIIndex < poiList.Count)
         {
-            seqManager.OnPOIExit(poi);
+            POI next = poiList[currentPOIIndex];
+            next.gameObject.SetActive(true);
+            Debug.Log($"➡️ Activado siguiente POI: {next.poiName}");
+        }
+        else
+        {
+            Debug.Log("✅ Todos los POIs completados");
         }
     }
 
     float Haversine(double lat1, double lon1, double lat2, double lon2)
     {
-        double R = 6371000; // metros
+        double R = 6371000;
         double dLat = Mathf.Deg2Rad * (float)(lat2 - lat1);
         double dLon = Mathf.Deg2Rad * (float)(lon2 - lon1);
         double a = Mathf.Sin((float)dLat / 2) * Mathf.Sin((float)dLat / 2) +
