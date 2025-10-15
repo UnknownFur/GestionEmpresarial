@@ -1105,6 +1105,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   locationPermission: {fileID: 1993910660}
   mapLoader: {fileID: 864622866}
+  poiList:
+  - {fileID: 533459188}
+  - {fileID: 1474561383}
 --- !u!4 &1425842815
 Transform:
   m_ObjectHideFlags: 0

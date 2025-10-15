@@ -19,11 +19,11 @@ public class POIManager : MonoBehaviour
             return;
         }
 
-        // Solo el primer POI está activo al inicio
+        // Solo el primer POI visible, pero todos inician desactivados lógicamente
         for (int i = 0; i < poiList.Count; i++)
         {
             poiList[i].gameObject.SetActive(i == 0);
-            poiList[i].isActive = i == 0;
+            poiList[i].isActive = false;
         }
 
         // Enviar los POIs visibles al mapa
@@ -33,7 +33,7 @@ public class POIManager : MonoBehaviour
             mapLoader.SendJS(js);
         }
 
-        Debug.Log($"🎯 POI inicial activo: {poiList[0].poiName}");
+        Debug.Log($"🎯 POI inicial visible: {poiList[0].poiName}");
     }
 
     void Update()
@@ -46,6 +46,8 @@ public class POIManager : MonoBehaviour
 
         POI activePOI = poiList[currentPOIIndex];
         float dist = Haversine(lat, lon, activePOI.latitude, activePOI.longitude);
+
+        Debug.Log($"📍 Distancia al POI {activePOI.poiName}: {dist} m");
 
         if (!activePOI.isActive && dist <= activePOI.activationRadius)
         {
@@ -60,39 +62,38 @@ public class POIManager : MonoBehaviour
     void ActivatePOI(POI poi)
     {
         poi.isActive = true;
+
+        // Ocultar mapa
         mapLoader.ShowMap(false);
 
-        var arCam = GameObject.Find("ARCamera");
-        if (arCam != null)
+        // Activar cámara AR
+        if (VuforiaBehaviour.Instance != null)
         {
-            var vuforiaBehaviour = arCam.GetComponent<VuforiaBehaviour>();
-            if (vuforiaBehaviour != null)
-                vuforiaBehaviour.enabled = true;
+            VuforiaBehaviour.Instance.enabled = true;
         }
 
-        Debug.Log($"🚀 Activando POI: {poi.poiName}");
+        Debug.Log($"🚀 Activando AR para POI: {poi.poiName}");
     }
 
     void DeactivatePOI(POI poi)
     {
         poi.isActive = false;
+
+        // Mostrar mapa
         mapLoader.ShowMap(true);
 
-        var arCam = GameObject.Find("ARCamera");
-        if (arCam != null)
+        if (VuforiaBehaviour.Instance != null)
         {
-            var vuforiaBehaviour = arCam.GetComponent<VuforiaBehaviour>();
-            if (vuforiaBehaviour != null)
-                vuforiaBehaviour.enabled = false;
+            VuforiaBehaviour.Instance.enabled = false;
         }
 
-        // Pasar al siguiente POI
+        // Avanzar al siguiente POI
         currentPOIIndex++;
         if (currentPOIIndex < poiList.Count)
         {
             POI next = poiList[currentPOIIndex];
             next.gameObject.SetActive(true);
-            Debug.Log($"➡️ Activado siguiente POI: {next.poiName}");
+            Debug.Log($"➡️ Siguiente POI activado: {next.poiName}");
         }
         else
         {
