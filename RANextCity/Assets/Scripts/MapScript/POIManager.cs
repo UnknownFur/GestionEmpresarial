@@ -1,5 +1,5 @@
 using UnityEngine;
-using Vuforia;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
 public class POIManager : MonoBehaviour
@@ -9,7 +9,7 @@ public class POIManager : MonoBehaviour
     [SerializeField] private MapLoader mapLoader;
     [SerializeField] private List<POI> poiList = new List<POI>();
 
-    private int currentPOIIndex = 0;
+    private bool insidePOI = false;
 
     void Start()
     {
@@ -19,86 +19,51 @@ public class POIManager : MonoBehaviour
             return;
         }
 
-        // Solo el primer POI visible, pero todos inician desactivados lógicamente
+        // Registrar el total de POIs en RouteManager
+        RouteManager.Instance.SetTotalPOIs(poiList.Count);
+
+        int index = Mathf.Clamp(RouteManager.Instance.currentPOIIndex, 0, poiList.Count - 1);
+
+        // Activar solo el POI actual
         for (int i = 0; i < poiList.Count; i++)
         {
-            poiList[i].gameObject.SetActive(i == 0);
+            poiList[i].gameObject.SetActive(i == index);
             poiList[i].isActive = false;
         }
 
-        // Enviar los POIs visibles al mapa
-        foreach (var poi in poiList)
-        {
-            string js = $"addPOI({poi.latitude}, {poi.longitude}, '{poi.poiName}')";
-            mapLoader.SendJS(js);
-        }
-
-        Debug.Log($"🎯 POI inicial visible: {poiList[0].poiName}");
+        Debug.Log($"🎯 POI activo: {poiList[index].poiName}");
     }
 
     void Update()
     {
         if (locationPermission == null || poiList.Count == 0) return;
 
+        int index = RouteManager.Instance.currentPOIIndex;
+        if (index >= poiList.Count) return;
+
         double lat = locationPermission.latitude;
         double lon = locationPermission.longitude;
         mapLoader.UpdatePosition(lat, lon);
 
-        POI activePOI = poiList[currentPOIIndex];
+        POI activePOI = poiList[index];
         float dist = Haversine(lat, lon, activePOI.latitude, activePOI.longitude);
 
-        Debug.Log($"📍 Distancia al POI {activePOI.poiName}: {dist} m");
-
-        if (!activePOI.isActive && dist <= activePOI.activationRadius)
+        // 🔹 Entrando al POI
+        if (!insidePOI && dist <= activePOI.activationRadius)
         {
-            ActivatePOI(activePOI);
-        }
-        else if (activePOI.isActive && dist > activePOI.deactivationRadius)
-        {
-            DeactivatePOI(activePOI);
+            insidePOI = true;
+            EnterPOI(activePOI);
         }
     }
 
-    void ActivatePOI(POI poi)
+    void EnterPOI(POI poi)
     {
         poi.isActive = true;
+        Debug.Log($"🚀 Entrando al POI: {poi.poiName}");
 
-        // Ocultar mapa
+        // Ocultar mapa y cargar escena AR
         mapLoader.ShowMap(false);
-
-        // Activar cámara AR
-        if (VuforiaBehaviour.Instance != null)
-        {
-            VuforiaBehaviour.Instance.enabled = true;
-        }
-
-        Debug.Log($"🚀 Activando AR para POI: {poi.poiName}");
-    }
-
-    void DeactivatePOI(POI poi)
-    {
-        poi.isActive = false;
-
-        // Mostrar mapa
-        mapLoader.ShowMap(true);
-
-        if (VuforiaBehaviour.Instance != null)
-        {
-            VuforiaBehaviour.Instance.enabled = false;
-        }
-
-        // Avanzar al siguiente POI
-        currentPOIIndex++;
-        if (currentPOIIndex < poiList.Count)
-        {
-            POI next = poiList[currentPOIIndex];
-            next.gameObject.SetActive(true);
-            Debug.Log($"➡️ Siguiente POI activado: {next.poiName}");
-        }
-        else
-        {
-            Debug.Log("✅ Todos los POIs completados");
-        }
+        SceneManager.LoadScene("AR"); // Nombre exacto de tu escena AR
     }
 
     float Haversine(double lat1, double lon1, double lat2, double lon2)
