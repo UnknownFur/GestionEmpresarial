@@ -9,6 +9,12 @@ public class LocationPermission : MonoBehaviour
 
     void Start()
     {
+#if UNITY_EDITOR
+    latitude = 4.940341026720601;  // Coordenadas cercanas a tu POL_01
+    longitude = -74.01067645895934;
+    StartCoroutine(UpdateLocation());
+    return;
+#endif
 #if UNITY_ANDROID
         // Pedir permiso de ubicación fina si no está concedido
         if (!UnityEngine.Android.Permission.HasUserAuthorizedPermission(UnityEngine.Android.Permission.FineLocation))
@@ -86,4 +92,8 @@ public class LocationPermission : MonoBehaviour
             yield return new WaitForSeconds(1f); // Actualiza cada segundo
         }
     }
+
+
 }
+
+

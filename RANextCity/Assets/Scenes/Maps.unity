@@ -169,6 +169,7 @@ MonoBehaviour:
   activationRadius: 20
   deactivationRadius: 30
   isActive: 0
+  description: 
 --- !u!1 &52623919
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,6 +220,7 @@ MonoBehaviour:
   activationRadius: 20
   deactivationRadius: 30
   isActive: 0
+  description: 
 --- !u!1 &249609289
 GameObject:
   m_ObjectHideFlags: 0
@@ -269,6 +271,7 @@ MonoBehaviour:
   activationRadius: 20
   deactivationRadius: 30
   isActive: 0
+  description: 
 --- !u!1 &371276244
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,6 +307,7 @@ MonoBehaviour:
   activationRadius: 20
   deactivationRadius: 30
   isActive: 0
+  description: 
 --- !u!4 &371276246
 Transform:
   m_ObjectHideFlags: 0
@@ -369,6 +373,7 @@ MonoBehaviour:
   activationRadius: 20
   deactivationRadius: 30
   isActive: 0
+  description: 
 --- !u!1 &533459186
 GameObject:
   m_ObjectHideFlags: 0
@@ -385,7 +390,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &533459187
 Transform:
   m_ObjectHideFlags: 0
@@ -419,6 +424,7 @@ MonoBehaviour:
   activationRadius: 20
   deactivationRadius: 30
   isActive: 0
+  description: 
 --- !u!1 &563566762
 GameObject:
   m_ObjectHideFlags: 0
@@ -791,11 +797,11 @@ Transform:
   m_GameObject: {fileID: 873867794}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -322.3027, y: -614.9645, z: 0.94665563}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1639646770}
+  m_Father: {fileID: 1949418610}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &873867796
 MonoBehaviour:
@@ -815,6 +821,8 @@ MonoBehaviour:
   activationRadius: 20
   deactivationRadius: 30
   isActive: 0
+  description: "Lo mas destacable del edificio D es la rpecencia de salas de computo,
+    habiendo desde las mas sencillas a quellas eapacializadas en dise\xF1o "
 --- !u!1 &990739950
 GameObject:
   m_ObjectHideFlags: 0
@@ -865,6 +873,7 @@ MonoBehaviour:
   activationRadius: 20
   deactivationRadius: 30
   isActive: 0
+  description: 
 --- !u!1 &1005919846
 GameObject:
   m_ObjectHideFlags: 0
@@ -915,6 +924,7 @@ MonoBehaviour:
   activationRadius: 20
   deactivationRadius: 30
   isActive: 0
+  description: 
 --- !u!1 &1045333647
 GameObject:
   m_ObjectHideFlags: 0
@@ -965,6 +975,7 @@ MonoBehaviour:
   activationRadius: 20
   deactivationRadius: 30
   isActive: 0
+  description: 
 --- !u!1 &1127145176
 GameObject:
   m_ObjectHideFlags: 0
@@ -1015,6 +1026,7 @@ MonoBehaviour:
   activationRadius: 20
   deactivationRadius: 30
   isActive: 0
+  description: 
 --- !u!1 &1316906473
 GameObject:
   m_ObjectHideFlags: 0
@@ -1041,11 +1053,11 @@ Transform:
   m_GameObject: {fileID: 1316906473}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -322.3027, y: -614.9645, z: 0.94665563}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1639646770}
+  m_Father: {fileID: 1949418610}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1316906475
 MonoBehaviour:
@@ -1065,6 +1077,8 @@ MonoBehaviour:
   activationRadius: 20
   deactivationRadius: 30
   isActive: 0
+  description: El principal atractivo del edicifio de bloques E es la diversidad
+    de salas Scale lab junto con su auditorio
 --- !u!1 &1345800969
 GameObject:
   m_ObjectHideFlags: 0
@@ -1115,6 +1129,7 @@ MonoBehaviour:
   activationRadius: 20
   deactivationRadius: 30
   isActive: 0
+  description: 
 --- !u!1 &1353283463
 GameObject:
   m_ObjectHideFlags: 0
@@ -1150,6 +1165,7 @@ MonoBehaviour:
   activationRadius: 50
   deactivationRadius: 70
   isActive: 0
+  description: 
 --- !u!4 &1353283465
 Transform:
   m_ObjectHideFlags: 0
@@ -1197,20 +1213,8 @@ MonoBehaviour:
   locationPermission: {fileID: 1993910660}
   mapLoader: {fileID: 864622866}
   poiList:
-  - {fileID: 371276245}
-  - {fileID: 1353283464}
-  - {fileID: 2011847745}
-  - {fileID: 1005919848}
-  - {fileID: 8761070}
-  - {fileID: 1345800971}
-  - {fileID: 436718650}
-  - {fileID: 249609291}
-  - {fileID: 990739952}
-  - {fileID: 1045333649}
-  - {fileID: 52623921}
-  - {fileID: 1127145178}
-  - {fileID: 873867796}
   - {fileID: 1316906475}
+  - {fileID: 873867796}
 --- !u!4 &1425842815
 Transform:
   m_ObjectHideFlags: 0
@@ -1242,7 +1246,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1474561382
 Transform:
   m_ObjectHideFlags: 0
@@ -1276,6 +1280,7 @@ MonoBehaviour:
   activationRadius: 20
   deactivationRadius: 30
   isActive: 0
+  description: 
 --- !u!1 &1639646769
 GameObject:
   m_ObjectHideFlags: 0
@@ -1291,7 +1296,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1639646770
 Transform:
   m_ObjectHideFlags: 0
@@ -1317,8 +1322,6 @@ Transform:
   - {fileID: 1045333648}
   - {fileID: 52623920}
   - {fileID: 1127145177}
-  - {fileID: 873867795}
-  - {fileID: 1316906474}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1891900876
@@ -1382,7 +1385,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1949418610
 Transform:
   m_ObjectHideFlags: 0
@@ -1396,6 +1399,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 873867795}
+  - {fileID: 1316906474}
   - {fileID: 533459187}
   - {fileID: 1474561382}
   m_Father: {fileID: 0}
@@ -1494,6 +1499,7 @@ MonoBehaviour:
   activationRadius: 20
   deactivationRadius: 30
   isActive: 0
+  description: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

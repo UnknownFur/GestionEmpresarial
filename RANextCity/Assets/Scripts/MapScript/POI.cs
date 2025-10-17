@@ -16,4 +16,7 @@ public class POI : MonoBehaviour
     public float deactivationRadius = 30f;
 
     [HideInInspector] public bool isActive = false;
+
+    public string description; // Texto explicativo del lugar
+
 }
