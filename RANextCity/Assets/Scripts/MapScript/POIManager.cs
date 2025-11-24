@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using System.Collections;
 
 public class POIManager : MonoBehaviour
 {
@@ -8,23 +9,28 @@ public class POIManager : MonoBehaviour
     [SerializeField] private LocationPermission locationPermission;
     [SerializeField] private MapLoader mapLoader;
     [SerializeField] private List<POI> poiList = new List<POI>();
-
+    public RouteList routeList = null;
     private bool insidePOI = false;
 
     void Start()
     {
-        if (poiList.Count == 0)
-        {
-            Debug.LogWarning("⚠️ No hay POIs asignados en el Inspector");
-            return;
-        }
+        StartCoroutine(InitializePOIs());
+    }
 
-        // Registrar el total de POIs en RouteManager
+    IEnumerator InitializePOIs()
+    {
+        yield return new WaitUntil(() =>
+            routeList != null &&
+            routeList.selectedRouteIndex != -1 &&
+            routeList.poiList.Count > 0
+        );
+
+        poiList = routeList.poiList;
+
         RouteManager.Instance.SetTotalPOIs(poiList.Count);
 
         int index = Mathf.Clamp(RouteManager.Instance.currentPOIIndex, 0, poiList.Count - 1);
 
-        // Activar solo el POI actual
         for (int i = 0; i < poiList.Count; i++)
         {
             poiList[i].gameObject.SetActive(i == index);

@@ -802,7 +802,7 @@ MonoBehaviour:
   loginButton: {fileID: 1992791172}
   exitButton: {fileID: 442365663}
   routesButton: {fileID: 1475474291}
-  logOutButton: {fileID: 0}
+  logOutButton: {fileID: 806605388}
   errorPanel: {fileID: 262697404}
   sceneManager: {fileID: 1370428874}
 --- !u!4 &611789963
@@ -1077,6 +1077,68 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 806605386}
   m_CullTransparentMesh: 1
+--- !u!1 &1266091487
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1266091489}
+  - component: {fileID: 1266091488}
+  - component: {fileID: 1266091490}
+  m_Layer: 0
+  m_Name: GlobalData
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1266091488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1266091487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54f240ad6cee7cf409b2ab630610fc84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1266091489
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1266091487}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 360.07913, y: 1027.3798, z: 6.799832}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1266091490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1266091487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 094168d32724ae44ca1c2eaeb5c26f82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  route1Unlocked: 0
+  route2Unlocked: 0
+  route3Unlocked: 0
+  selectedRoute: 0
+  userName: Unlogged User
 --- !u!1 &1341486409
 GameObject:
   m_ObjectHideFlags: 0
@@ -2073,3 +2135,4 @@ SceneRoots:
   - {fileID: 545503278}
   - {fileID: 1370428875}
   - {fileID: 611789963}
+  - {fileID: 1266091489}
