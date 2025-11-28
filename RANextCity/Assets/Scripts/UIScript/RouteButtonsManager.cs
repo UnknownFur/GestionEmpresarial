@@ -12,6 +12,7 @@ public class RouteButtonsManager : MonoBehaviour
         route1Button.onClick.AddListener(Route1);
         route2Button.onClick.AddListener(Route2); 
         route3Button.onClick.AddListener(Route3);
+        
     }
     void Route1()
     {
